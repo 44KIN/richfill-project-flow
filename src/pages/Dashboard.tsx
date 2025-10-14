@@ -1,3 +1,13 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+import ProjectManager from "./ProjectManager";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+        <ProjectManager />
+    </React.StrictMode>
+);
+
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { ProjectCard } from "@/components/ProjectCard";
 import { StatCard } from "@/components/StatCard";

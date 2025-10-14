@@ -7,7 +7,7 @@ const invoices = [
   {
     id: "INV-001",
     project: "E-commerce Website Redesign",
-    amount: "$5,400",
+    amount: "₦250,400",
     date: "Nov 1, 2025",
     dueDate: "Nov 15, 2025",
     status: "paid",
@@ -15,7 +15,7 @@ const invoices = [
   {
     id: "INV-002",
     project: "Mobile App Development",
-    amount: "$8,200",
+    amount: "₦185,200",
     date: "Nov 15, 2025",
     dueDate: "Nov 30, 2025",
     status: "paid",
@@ -23,7 +23,7 @@ const invoices = [
   {
     id: "INV-003",
     project: "E-commerce Website Redesign",
-    amount: "$3,600",
+    amount: "₦123,600",
     date: "Dec 1, 2025",
     dueDate: "Dec 15, 2025",
     status: "pending",
@@ -31,7 +31,7 @@ const invoices = [
   {
     id: "INV-004",
     project: "SEO Optimization",
-    amount: "$1,800",
+    amount: "₦91,800",
     date: "Nov 30, 2025",
     dueDate: "Dec 14, 2025",
     status: "paid",
@@ -39,8 +39,8 @@ const invoices = [
 ];
 
 const Invoices = () => {
-  const totalPaid = "$15,400";
-  const totalPending = "$3,600";
+  const totalPaid = "₦615,400";
+  const totalPending = "123,600";
   const nextPayment = "Dec 15, 2025";
 
   return (
