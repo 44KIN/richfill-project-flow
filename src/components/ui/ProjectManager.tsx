@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ProjectManager() {
     const [projects, setProjects] = useState< any[] >([]);
@@ -10,7 +10,7 @@ export default function ProjectManager() {
 
     // 🔹 Fetch all projects
     async function fetchProjects() {
-        const { data, error } = await supabase.from("project").select("*");
+        const { data, error } = await supabase.from("projects").select("*");
         if (error) console.error(error);
         else setProjects(data || []);
     }
@@ -21,15 +21,23 @@ export default function ProjectManager() {
 
     // 🔹 Add new or edit existing project
     async function saveProject() {
+        if (!projectName.trim()) {
+            alert("❌ Please enter a project name");
+            return;
+        }
+
         setLoading(true);
         const { error } = await supabase
-            .from("project")
-            .upsert([{ name: projectName, message, invoice_url: invoiceUrl }]);
+            .from("projects")
+            .insert([{ name: projectName, message, invoice_url: invoiceUrl }]);
         setLoading(false);
 
         if (error) alert("❌ Error saving project: " + error.message);
         else {
             alert("✅ Project saved successfully!");
+            setProjectName("");
+            setMessage("");
+            setInvoiceUrl("");
             fetchProjects();
         }
     }

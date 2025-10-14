@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../lib/ProjectDatabaseService";
-import { Project } from "../lib/LocalStorageProjectDatabase";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Project {
+    id: string;
+    name: string;
+    description?: string | null;
+    status: string;
+    message?: string | null;
+    invoice_url?: string | null;
+    created_at: string;
+    updated_at: string;
+}
 
 export default function ProjectManager() {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -12,7 +22,7 @@ export default function ProjectManager() {
 
     // 🔹 Fetch all projects
     async function fetchProjects() {
-        const { data, error } = await db.projects.getAll();
+        const { data, error } = await supabase.from("projects").select("*");
         if (error) {
             console.error(error);
         } else {
@@ -33,13 +43,13 @@ export default function ProjectManager() {
 
         setLoading(true);
         try {
-            const { error } = await db.projects.create({
+            const { error } = await supabase.from("projects").insert([{
                 name: projectName,
                 description: projectDescription,
                 status: 'active',
                 message,
                 invoice_url: invoiceUrl
-            });
+            }]);
 
             if (error) {
                 alert("❌ Error saving project: " + error.message);
@@ -64,7 +74,7 @@ export default function ProjectManager() {
         if (!window.confirm("Are you sure you want to delete this project?")) return;
         
         try {
-            const { error } = await db.projects.delete(id);
+            const { error } = await supabase.from("projects").delete().eq("id", id);
             if (error) {
                 alert("❌ Error deleting project");
             } else {
