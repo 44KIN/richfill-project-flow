@@ -115,7 +115,7 @@ const Dashboard = () => {
             Our team is here to assist you every step of the way.
           </p>
           <p className="text-primary-foreground font-semibold text-lg mb-6">
-            Call us: (555) 123-4567
+            Call us: 09099996659
           </p>
           <button className="px-6 py-3 bg-accent text-accent-foreground rounded-lg font-semibold hover:bg-accent-muted transition-colors">
             Contact Support
