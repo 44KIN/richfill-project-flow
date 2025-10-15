@@ -5,20 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 type Message = {
   id: string;
   sender: string;
   content: string;
   created_at: string;
-  project_id?: string;
+  project_id: string;
 };
 
 type Project = {
   id: string;
   name: string;
-  description?: string;
+  description: string | null;
 };
 
 const Messages = () => {
@@ -27,7 +27,6 @@ const Messages = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const { toast } = useToast();
 
   useEffect(() => {
     fetchProjects();
@@ -35,8 +34,8 @@ const Messages = () => {
 
   useEffect(() => {
     if (selectedProject) {
-      fetchMessages();
-      subscribeToMessages();
+      fetchMessages(selectedProject.id);
+      subscribeToMessages(selectedProject.id);
     }
   }, [selectedProject]);
 
@@ -50,7 +49,6 @@ const Messages = () => {
       if (error) throw error;
       setProjects(data || []);
     } catch (error) {
-      console.error("Error fetching projects:", error);
       toast({
         title: "Error",
         description: "Failed to load projects",
@@ -61,35 +59,35 @@ const Messages = () => {
     }
   };
 
-  const fetchMessages = async () => {
-    if (!selectedProject) return;
-
+  const fetchMessages = async (projectId: string) => {
     try {
       const { data, error } = await supabase
         .from("messages")
         .select("*")
-        .eq("project_id", selectedProject.id)
+        .eq("project_id", projectId)
         .order("created_at", { ascending: true });
 
       if (error) throw error;
       setMessages(data || []);
     } catch (error) {
-      console.error("Error fetching messages:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load messages",
+        variant: "destructive",
+      });
     }
   };
 
-  const subscribeToMessages = () => {
-    if (!selectedProject) return;
-
+  const subscribeToMessages = (projectId: string) => {
     const channel = supabase
-      .channel(`messages-${selectedProject.id}`)
+      .channel(`messages:${projectId}`)
       .on(
         "postgres_changes",
         {
           event: "INSERT",
           schema: "public",
           table: "messages",
-          filter: `project_id=eq.${selectedProject.id}`,
+          filter: `project_id=eq.${projectId}`,
         },
         (payload) => {
           setMessages((prev) => [...prev, payload.new as Message]);
@@ -106,21 +104,15 @@ const Messages = () => {
     if (!newMessage.trim() || !selectedProject) return;
 
     try {
-      const { error } = await supabase.from("messages").insert([{
-        content: newMessage,
-        sender: "You",
+      const { error } = await supabase.from("messages").insert({
         project_id: selectedProject.id,
-      }]);
+        sender: "You",
+        content: newMessage.trim(),
+      });
 
       if (error) throw error;
-
       setNewMessage("");
-      toast({
-        title: "Message sent",
-        description: "Your message has been sent successfully",
-      });
     } catch (error) {
-      console.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "Failed to send message",
@@ -128,7 +120,6 @@ const Messages = () => {
       });
     }
   };
-
   if (loading) {
     return (
       <DashboardLayout>
