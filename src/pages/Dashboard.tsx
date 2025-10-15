@@ -111,8 +111,11 @@ const Dashboard = () => {
           <h3 className="text-2xl font-bold text-primary-foreground mb-2">
             Need help with your project?
           </h3>
-          <p className="text-primary-foreground/90 mb-6">
+          <p className="text-primary-foreground/90 mb-4">
             Our team is here to assist you every step of the way.
+          </p>
+          <p className="text-primary-foreground font-semibold text-lg mb-6">
+            Call us: (555) 123-4567
           </p>
           <button className="px-6 py-3 bg-accent text-accent-foreground rounded-lg font-semibold hover:bg-accent-muted transition-colors">
             Contact Support
