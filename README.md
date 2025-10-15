@@ -8,17 +8,17 @@ This project was built during the **SIWES programme** as part of my industrial t
 
 ---
 
-## ⚙️ Features
-- 📊 **Dashboard Overview** – Displays active, completed, and pending projects with progress tracking.
-- 🧾 **Project Management** – Add, view, and update projects stored in a Supabase database.
-- 💬 **Messaging System** – Send and receive project-related updates (to be integrated).
-- 💸 **Invoices Section** – Manage and view invoices linked to each project.
-- ⚡ **Responsive Design** – Works across devices using Tailwind CSS and shadcn-ui.
-- 🔒 **Local Development Ready** – Runs entirely on your local machine with simple setup.
+##  Features
+-  **Dashboard Overview** – Displays active, completed, and pending projects with progress tracking.
+-  **Project Management** – Add, view, and update projects stored in a Supabase database.
+-  **Messaging System** – Send and receive project-related updates (to be integrated).
+-  **Invoices Section** – Manage and view invoices linked to each project.
+-  **Responsive Design** – Works across devices using Tailwind CSS and shadcn-ui.
+-  **Local Development Ready** – Runs entirely on your local machine with simple setup.
 
 ---
 
-## 🧠 Technologies Used
+##  Technologies Used
 - **React** – For building the user interface.
 - **TypeScript** – For type-safe and scalable development.
 - **Vite** – For fast bundling and development.
@@ -26,6 +26,3 @@ This project was built during the **SIWES programme** as part of my industrial t
 - **shadcn-ui** – For beautiful, reusable UI components.
 - **Supabase** – As the backend for authentication, storage, and real-time database operations.
 
----
-
-## 🧩 Project Structure
