@@ -1,61 +1,134 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
-const conversations = [
-  {
-    id: 1,
-    name: "Sarah Mitchell",
-    role: "Project Manager",
-    lastMessage: "The design phase is now complete. Moving to development.",
-    time: "2h ago",
-    unread: 2,
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    role: "Developer",
-    lastMessage: "I've uploaded the latest build to the testing environment.",
-    time: "5h ago",
-    unread: 0,
-  },
-  {
-    id: 3,
-    name: "Emma Wilson",
-    role: "Designer",
-    lastMessage: "Here are the final mockups for your review.",
-    time: "1d ago",
-    unread: 1,
-  },
-];
+type Message = {
+  id: string;
+  sender: string;
+  content: string;
+  created_at: string;
+  project_id?: string;
+};
 
-const messages = [
-  {
-    id: 1,
-    sender: "Sarah Mitchell",
-    content: "Hi John! I wanted to update you on the e-commerce redesign project.",
-    time: "10:30 AM",
-    isOwn: false,
-  },
-  {
-    id: 2,
-    sender: "You",
-    content: "Great! How's the progress looking?",
-    time: "10:32 AM",
-    isOwn: true,
-  },
-  {
-    id: 3,
-    sender: "Sarah Mitchell",
-    content: "The design phase is now complete. Moving to development. We're on track for the December 20th deadline.",
-    time: "10:35 AM",
-    isOwn: false,
-  },
-];
+type Project = {
+  id: string;
+  name: string;
+  description?: string;
+};
 
 const Messages = () => {
+  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    if (selectedProject) {
+      fetchMessages();
+      subscribeToMessages();
+    }
+  }, [selectedProject]);
+
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setProjects(data || []);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load projects",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMessages = async () => {
+    if (!selectedProject) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("project_id", selectedProject.id)
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+      setMessages(data || []);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const subscribeToMessages = () => {
+    if (!selectedProject) return;
+
+    const channel = supabase
+      .channel(`messages-${selectedProject.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+          filter: `project_id=eq.${selectedProject.id}`,
+        },
+        (payload) => {
+          setMessages((prev) => [...prev, payload.new as Message]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  };
+
+  const sendMessage = async () => {
+    if (!newMessage.trim() || !selectedProject) return;
+
+    try {
+      const { error } = await supabase.from("messages").insert([{
+        content: newMessage,
+        sender: "You",
+        project_id: selectedProject.id,
+      }]);
+
+      if (error) throw error;
+
+      setNewMessage("");
+      toast({
+        title: "Message sent",
+        description: "Your message has been sent successfully",
+      });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return (
       <DashboardLayout>
