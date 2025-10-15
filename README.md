@@ -1,30 +1,73 @@
-# Richfill Client Hub (SIWES Version)
+# Welcome to your Lovable project
 
-Richfill Client Hub is a web-based platform designed to help organizations manage their client information, projects, and performance reports efficiently. This version was developed during the SIWES program to demonstrate practical web development and project management skills.
+## Project info
 
-## Features
+**URL**: https://lovable.dev/projects/559a47ab-85e1-4dd9-b368-2dfa3fc319f2
 
-* Project management dashboard
-* Task tracking system
-* Client information records
-* User authentication (login and signup)
-* Analytics and reports
-* Responsive and simple interface
+## How can I edit this code?
 
-## Tools and Technologies Used
+There are several ways of editing your application.
 
-* React.js
-* TypeScript
-* Tailwind CSS
-* Node.js (for backend, if included)
-* Firebase (for authentication and data storage)
+**Use Lovable**
 
-## Purpose
+Simply visit the [Lovable Project](https://lovable.dev/projects/559a47ab-85e1-4dd9-b368-2dfa3fc319f2) and start prompting.
 
-This project was created as part of the Student Industrial Work Experience Scheme (SIWES) to apply classroom knowledge in real-world development tasks. It represents an understanding of teamwork, client communication, task planning, and web application deployment.
+Changes made via Lovable will be committed automatically to this repo.
 
-## Author
+**Use your preferred IDE**
 
-Shonibare King Adeyemi
-Department of Computer Science
-Lagos State University
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+
+Follow these steps:
+
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
+```
+
+**Edit a file directly in GitHub**
+
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
+
+**Use GitHub Codespaces**
+
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
+
+## What technologies are used for this project?
+
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+## How can I deploy this project?
+
+Simply open [Lovable](https://lovable.dev/projects/559a47ab-85e1-4dd9-b368-2dfa3fc319f2) and click on Share -> Publish.
+
+## Can I connect a custom domain to my Lovable project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
